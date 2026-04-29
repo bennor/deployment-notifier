@@ -51,6 +51,10 @@ https://<your-deployment>.vercel.app/api/webhook
 
 Select the event types you want to be notified about (e.g. `deployment.succeeded`, `deployment.error`). See the full list of [webhook event types](https://vercel.com/docs/webhooks/webhooks-api#supported-event-types).
 
+## Notification methods
+
+This demo uses SMTP, but once the webhook payload is verified you can send notifications any way you like — email via an HTTPS API (e.g. SendGrid, Resend), SMS (e.g. Twilio), web push, Slack, or any other channel.
+
 ## Webhook signature verification
 
 Every request is verified against the `x-vercel-signature` header before processing. Vercel signs the raw request body with HMAC-SHA1 using the secret displayed when you create the webhook — set this as `WEBHOOK_SECRET`. Requests with a missing or invalid signature are rejected with a `403`. See [securing webhooks](https://vercel.com/docs/webhooks/webhooks-api#securing-webhooks) for more detail.
