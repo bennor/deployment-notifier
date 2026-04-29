@@ -24,6 +24,7 @@ cp .env.example .env
 
 | Variable | Description |
 |---|---|
+| `WEBHOOK_SECRET` | Secret shown when creating the webhook in Vercel |
 | `SMTP_HOST` | SMTP server hostname |
 | `SMTP_PORT` | SMTP port (default: `587`) |
 | `SMTP_SECURE` | Set to `true` for port 465 / TLS |
@@ -52,4 +53,4 @@ Select the event types you want to be notified about (e.g. `deployment.succeeded
 
 ## Webhook signature verification
 
-Vercel signs every webhook request with an `x-vercel-signature` header (HMAC-SHA1 of the raw body using your webhook secret). This demo does not verify the signature — for production use, follow the [securing webhooks](https://vercel.com/docs/webhooks/webhooks-api#securing-webhooks) guide.
+Every request is verified against the `x-vercel-signature` header before processing. Vercel signs the raw request body with HMAC-SHA1 using the secret displayed when you create the webhook — set this as `WEBHOOK_SECRET`. Requests with a missing or invalid signature are rejected with a `403`. See [securing webhooks](https://vercel.com/docs/webhooks/webhooks-api#securing-webhooks) for more detail.
