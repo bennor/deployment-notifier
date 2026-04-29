@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { readRawBody, isValidSignature, isDeploymentEvent, sendNotificationEmail } from '../lib/webhook';
+import { readRawBody, isValidSignature, isDeploymentEvent, sendNotification } from '../lib/webhook';
 
 // Disable Vercel's built-in body parsing so we can read the raw bytes for
 // signature verification — the HMAC must be computed over the exact bytes
@@ -25,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ ignored: true });
   }
 
-  await sendNotificationEmail(event);
+  sendNotification(event);
 
   res.status(200).json({ ok: true });
 }

@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import type { IncomingMessage } from 'http';
-import nodemailer from 'nodemailer';
 
 export interface WebhookBody {
   type: string;
@@ -40,30 +39,15 @@ export function isDeploymentEvent(type: string): boolean {
   return type.startsWith('deployment.');
 }
 
-export async function sendNotificationEmail(event: WebhookBody): Promise<void> {
+export function sendNotification(event: WebhookBody): void {
   const { type, createdAt, payload } = event;
   const project = payload?.project;
   const deployment = payload?.deployment;
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
-    to: process.env.NOTIFY_EMAIL,
-    subject: `[${project?.name ?? 'Vercel'}] ${type}`,
-    text: [
-      `Event:   ${type}`,
-      `Project: ${project?.name ?? 'unknown'}`,
-      `URL:     https://${deployment?.url ?? 'n/a'}`,
-      `Time:    ${new Date(createdAt).toUTCString()}`,
-    ].join('\n'),
+  console.log('[deployment-notifier]', {
+    type,
+    project: project?.name ?? 'unknown',
+    url: `https://${deployment?.url ?? 'n/a'}`,
+    time: new Date(createdAt).toUTCString(),
   });
 }
