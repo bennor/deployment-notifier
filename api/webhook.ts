@@ -16,6 +16,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const { type, payload, createdAt } = req.body as WebhookBody;
+
+  if (!type.startsWith('deployment.')) {
+    return res.status(200).json({ ignored: true });
+  }
+
   const deployment = payload?.deployment;
   const project = payload?.project;
 

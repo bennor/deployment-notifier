@@ -1,6 +1,6 @@
 # deployment-notifier
 
-A minimal Vercel Function that receives a [Vercel deployment webhook](https://vercel.com/docs/webhooks) and sends an email notification via SMTP.
+A demo of the minimal setup required to notify specific people by email when selected [Vercel deployment events](https://vercel.com/docs/webhooks) occur. A single Vercel Function receives the webhook and sends the notification via SMTP.
 
 ## How it works
 
