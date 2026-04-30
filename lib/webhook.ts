@@ -2,11 +2,27 @@ import crypto from 'crypto';
 import type { IncomingMessage } from 'http';
 
 export interface WebhookBody {
+  id: string;
   type: string;
   createdAt: number;
+  region: string | null;
   payload: {
-    deployment?: { url?: string };
-    project?: { name?: string };
+    team: { id: string | null };
+    user: { id: string };
+    deployment: {
+      id: string;
+      name: string;
+      url: string;
+      meta: Record<string, string>;
+    };
+    project: { id: string };
+    links: {
+      deployment: string;
+      project: string;
+    };
+    target: 'production' | 'staging' | null;
+    plan: string;
+    regions: string[];
   };
 }
 
@@ -41,13 +57,11 @@ export function isDeploymentEvent(type: string): boolean {
 
 export function sendNotification(event: WebhookBody): void {
   const { type, createdAt, payload } = event;
-  const project = payload?.project;
-  const deployment = payload?.deployment;
 
   console.log('[deployment-notifier]', {
     type,
-    project: project?.name ?? 'unknown',
-    url: `https://${deployment?.url ?? 'n/a'}`,
+    name: payload.deployment.name,
+    url: `https://${payload.deployment.url}`,
     time: new Date(createdAt).toUTCString(),
   });
 }
