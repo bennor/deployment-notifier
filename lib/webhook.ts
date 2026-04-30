@@ -62,6 +62,7 @@ export function sendNotification(event: WebhookBody): void {
     type,
     name: payload.deployment.name,
     url: `https://${payload.deployment.url}`,
+    deployment: payload.links.deployment,
     time: new Date(createdAt).toUTCString(),
   });
 }
